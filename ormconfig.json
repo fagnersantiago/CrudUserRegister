@@ -1,0 +1,17 @@
+{
+   "type": "postgres",
+   "host": "192.168.99.100",
+   "port": 5432,
+   "username": "docker",
+   "password": "ignite",
+   "database": "UserRegister",
+   "migrations": [
+      "./src/database/migrations/*.ts"
+   ],
+   "entities": [
+      "./src/model/**.ts"
+     ],
+   "cli": {
+    "migrationsDir": "./src/database/migrations"
+}
+}
