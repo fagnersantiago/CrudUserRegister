@@ -3,6 +3,7 @@ import { getCustomRepository } from "typeorm";
 import UserRepository from "../repository/UserRepository";
 import AppError from "../error/AppError";
 import User from "../model/User";
+import { uuid } from "uuidv4";
 
 class UserController {
   async create(request: Request, response: Response) {
@@ -66,16 +67,19 @@ class UserController {
     const { id } = request.params;
 
     const userRepository = getCustomRepository(UserRepository);
-    const userExist = userRepository.findOne({ id, last_name });
+    const userExist = await userRepository
+      .createQueryBuilder()
+      .update(User)
+      .set({ last_name: last_name })
+      .where("id =:id", { id })
+      .execute();
 
     if (!userExist) {
       throw new AppError("user not found!");
     }
-    const user = userRepository.save({ last_name });
 
-    return response.json(user);
+    return response.json(userRepository);
   }
-
   async delete(request: Request, response: Response) {
     const { id } = request.params;
 
