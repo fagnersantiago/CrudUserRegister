@@ -8,7 +8,7 @@ const userController = new UserController();
 router.post("/user", userController.create);
 router.get("/userList", userController.show);
 router.get("/userListNickname", userController.showUserByNickname);
-router.put("/userUpdatedLastName", userController.update);
+router.put("/update/:id", userController.update);
 router.delete("/user/:id", userController.delete);
 
 export default router;

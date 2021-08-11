@@ -11,7 +11,6 @@ const app = express();
 
 app.use(express.json());
 app.use(router);
-console.log("chegou aqui!");
 
 app.use(
   (err: Error, request: Request, response: Response, _next: NextFunction) => {

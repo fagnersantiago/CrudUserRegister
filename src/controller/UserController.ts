@@ -63,22 +63,20 @@ class UserController {
   }
 
   async update(request: Request, response: Response) {
-    const { last_name } = request.body;
     const { id } = request.params;
+    const { last_name } = request.body;
 
     const userRepository = getCustomRepository(UserRepository);
-    const userExist = await userRepository
-      .createQueryBuilder()
-      .update(User)
-      .set({ last_name: last_name })
-      .where("id =:id", { id })
-      .execute();
+    const userExist = await userRepository.findOne({ id });
 
     if (!userExist) {
       throw new AppError("user not found!");
     }
 
-    return response.json(userRepository);
+    const user = await userRepository.update(id, { last_name: last_name });
+
+    console.log(user);
+    return response.status(200).json(user);
   }
   async delete(request: Request, response: Response) {
     const { id } = request.params;
@@ -91,9 +89,9 @@ class UserController {
       throw new AppError("user not found");
     }
 
-    userRepository.remove(user);
+    await userRepository.remove(user);
 
-    return response.status(204).send("user deleted with success");
+    return response.status(200).send("user deleted with success");
   }
 }
 
