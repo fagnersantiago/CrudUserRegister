@@ -39,7 +39,7 @@ class UserController {
       .orWhere("user.last_name = :last_name", { last_name })
       .getMany();
 
-    const userExist = user.filter((find) => find.name !== name);
+    const userExist = user.find((find) => find.name === name);
 
     if (!userExist) {
       throw new AppError("user not found!");
