@@ -1,9 +1,8 @@
-import { json, Request, Response } from "express";
+import { Request, Response } from "express";
 import { getCustomRepository } from "typeorm";
 import UserRepository from "../repository/UserRepository";
 import AppError from "../error/AppError";
 import User from "../model/User";
-import { uuid } from "uuidv4";
 
 class UserController {
   async create(request: Request, response: Response) {
@@ -41,13 +40,14 @@ class UserController {
       .getMany();
 
     const userExist = user.filter((find) => find.name !== name);
+
     if (!userExist) {
       throw new AppError("user not found!");
     }
     return response.status(200).json(user);
   }
 
-  async showUserByNickname(request: Request, response: Response) {
+  async ListUserByNickname(request: Request, response: Response) {
     const nickname = request.query;
 
     const userRepository = getCustomRepository(UserRepository);
@@ -62,22 +62,42 @@ class UserController {
     return response.status(200).json({ name, last_name, ...nickname });
   }
 
-  async update(request: Request, response: Response) {
+  async updateLastName(request: Request, response: Response) {
     const { id } = request.params;
     const { last_name } = request.body;
 
     const userRepository = getCustomRepository(UserRepository);
-    const userExist = await userRepository.findOne({ id });
+    const userExist = await userRepository
+      .createQueryBuilder()
+      .update(User)
+      .set({ last_name })
+      .where("id = :id", { id })
+      .execute();
 
     if (!userExist) {
       throw new AppError("user not found!");
     }
-
-    const user = await userRepository.update(id, { last_name: last_name });
-
-    console.log(user);
-    return response.status(200).json(user);
+    return response.status(200).json(userExist);
   }
+
+  async updateNickname(request: Request, response: Response) {
+    const { id } = request.params;
+    const { nickname } = request.body;
+
+    const userRepository = getCustomRepository(UserRepository);
+    const userExist = await userRepository
+      .createQueryBuilder()
+      .update(User)
+      .set({ nickname })
+      .where("id = :id", { id })
+      .execute();
+
+    if (!userExist) {
+      throw new AppError("user not found!");
+    }
+    return response.status(200).json(userExist);
+  }
+
   async delete(request: Request, response: Response) {
     const { id } = request.params;
 
