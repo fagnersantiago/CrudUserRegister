@@ -7,7 +7,7 @@ const userController = new UserController();
 
 router.post("/user", userController.create);
 router.get("/userList", userController.show);
-router.get("/userListNickname", userController.ListUserByNickname);
+router.get("/userListNickname", userController.listUserByNickname);
 router.put("/updateLastName/:id", userController.updateLastName);
 router.put("/updateNickname/:id", userController.updateNickname);
 router.delete("/user/:id", userController.delete);

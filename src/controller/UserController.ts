@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { getCustomRepository } from "typeorm";
 import UserRepository from "../repository/UserRepository";
-import AppError from "../error/AppError";
+import AppError from "../errors/AppError";
 import User from "../model/User";
 
 class UserController {
@@ -47,7 +47,7 @@ class UserController {
     return response.status(200).json(user);
   }
 
-  async ListUserByNickname(request: Request, response: Response) {
+  async listUserByNickname(request: Request, response: Response) {
     const nickname = request.query;
 
     const userRepository = getCustomRepository(UserRepository);
