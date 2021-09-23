@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { getCustomRepository } from "typeorm";
-import UserRepository from "../repository/UserRepository";
+import UserRepository from "../repositories/UserRepository";
 import AppError from "../errors/AppError";
 import User from "../model/User";
 
@@ -9,9 +9,7 @@ class UserController {
     const { name, last_name, nickname, adress, bio } = request.body;
 
     const userRepository = getCustomRepository(UserRepository);
-    const nicknameExist = await userRepository.findOne({
-      nickname,
-    });
+    const nicknameExist = await userRepository.findByNickname(nickname);
 
     if (nicknameExist) {
       throw new AppError("nickname already exists!");

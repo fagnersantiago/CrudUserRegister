@@ -2,7 +2,7 @@ import "reflect-metadata";
 import express, { Request, Response, NextFunction } from "express";
 import "express-async-errors";
 import router from "./routes";
-import AppError from "./error/AppError";
+import AppError from "./errors/AppError";
 import CreateConnection from "./database";
 
 CreateConnection();
